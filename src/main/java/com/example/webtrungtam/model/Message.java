@@ -5,25 +5,29 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.Type;
+import org.hibernate.type.SqlTypes;
+
 import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "Messages")
+@Table(name = "messenger")
 public class Message {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_message;
+    private int id_message;
 
     @ManyToOne
-    @JoinColumn(name = "id_sender", nullable = false)
+    @JoinColumn(name = "id_sender",columnDefinition = "CHAR(8)", nullable = false)
     private User sender;
 
     @ManyToOne
-    @JoinColumn(name = "id_receiver", nullable = false)
+    @JoinColumn(name = "id_receiver",columnDefinition = "CHAR(8)", nullable = false)
     private User receiver;
 
     @Column(nullable = false)
@@ -33,21 +37,22 @@ public class Message {
     private LocalDateTime timestamp;
 
     @Column(name = "is_read")
-    private Integer isRead=0;
+    @JdbcTypeCode(SqlTypes.BOOLEAN) // Sử dụng BOOLEAN
+    private Boolean isRead;
 
-    public Integer getIsRead() {
+    public Boolean getIsRead() {
         return isRead;
     }
     // Đánh dấu tin nhắn đã đọc
-    public void setIsRead(Integer isRead) {
+    public void setIsRead(Boolean isRead) {
         this.isRead = isRead;
     }
 
-    public Long getIdMessage() {
+    public int getIdMessage() {
         return id_message;
     }
 
-    public void setIdMessage(Long id_message) {
+    public void setIdMessage(int id_message) {
         this.id_message = id_message;
     }
 
